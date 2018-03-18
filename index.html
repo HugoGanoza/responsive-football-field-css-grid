@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Campo de futbol responsive football / soccer field. CSS Grid</title>
+
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        html {
+            box-sizing: border-box;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        body {
+            background: #0f0c29;
+            background: radial-gradient(rgba(48, 48, 87, 0.8), rgba(40, 35, 87, 1), rgba(2, 1, 13, 1));
+        }
+
+        :root {
+            --ancho-lineas: 3px;
+        }
+
+        #escenario {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #contenedor-responsive {
+            position: relative;
+            width: 75%;
+            transition: all 1s ease;
+        }
+
+        #contenedor-responsive::before {
+            content: "";
+            display: block;
+            padding-top: 56.25%;
+        }
+
+        .contenedor-campo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-color: green;
+            background-image: url("hierba.png");
+            background-size: 8px 8px;
+            border: var(--ancho-lineas) solid white;
+            overflow: hidden;
+            display: grid;
+            grid-gap: 0px;
+            grid-template-rows: 0.25fr 0.75fr 2fr 0.75fr 0.25fr;
+            grid-template-columns: 0.09fr 1fr var(--ancho-lineas) 1fr 0.09fr;
+            grid-template-areas: "esi . lvmcar . esd " ". . lvmcar . . " "zc zc zc zc zc " ". . lvmcab . . " "eii . lvmcab . eid ";
+        }
+
+        /* Propiedades comunes a los corners */
+        #esquina-superior-izquierda,
+        #esquina-superior-derecha,
+        #esquina-inferior-izquierda,
+        #esquina-inferior-derecha {
+            position: relative;
+            overflow: hidden;
+        }
+
+        #esquina-superior-izquierda::after,
+        #esquina-superior-derecha::after,
+        #esquina-inferior-izquierda::after,
+        #esquina-inferior-derecha::after {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            content: "";
+            border: var(--ancho-lineas) solid white;
+            border-radius: 50%;
+        }
+
+        /* Propiedades especificas de los corners */
+        #esquina-superior-izquierda {
+            grid-area: esi;
+        }
+
+        #esquina-superior-izquierda:after {
+            top: -50%;
+            left: -50%;
+        }
+
+        #esquina-superior-derecha {
+            grid-area: esd;
+        }
+
+        #esquina-superior-derecha:after {
+            top: -50%;
+            left: 50%;
+        }
+
+        #esquina-inferior-izquierda {
+            grid-area: eii;
+        }
+
+        #esquina-inferior-izquierda:after {
+            top: 50%;
+            left: -50%;
+        }
+
+        #esquina-inferior-derecha {
+            grid-area: eid;
+        }
+
+        #esquina-inferior-derecha:after {
+            top: 50%;
+            left: 50%;
+        }
+
+        #linea-vertical-medio-campo-arriba {
+            background: white;
+            grid-area: lvmcar;
+        }
+
+        #linea-vertical-medio-campo-abajo {
+            background: white;
+            grid-area: lvmcab;
+        }
+
+        /* La zona central */
+        #zona-central {
+            grid-area: zc;
+            display: grid;
+            grid-gap: 0px;
+            grid-template-rows: repeat(20, 1fr);
+            grid-template-columns: repeat(12, 1fr) var(--ancho-lineas) repeat(12, 1fr);
+        }
+
+        #area-grande-izquierda {
+            background-color: green;
+            background-image: url("hierba.png");
+            background-size: 8px 8px;
+            border-top: var(--ancho-lineas) solid white;
+            border-right: var(--ancho-lineas) solid white;
+            border-bottom: var(--ancho-lineas) solid white;
+            z-index: 20;
+            grid-area: 1 / 1 / span 20 / span 4;
+        }
+
+        #area-pequena-izquierda {
+            border-top: var(--ancho-lineas) solid white;
+            border-right: var(--ancho-lineas) solid white;
+            border-bottom: var(--ancho-lineas) solid white;
+            z-index: 40;
+            grid-area: 5 / 1 / span 12 / span 2;
+        }
+
+        #penalty-izquierda {
+            position: relative;
+            left: calc(0% - calc(var(--ancho-lineas) + 4px));
+            width: calc(var(--ancho-lineas));
+            height: calc(var(--ancho-lineas));
+            background: white;
+            border-radius: 50%;
+            z-index: 30;
+            grid-area: 11 / 4 / span 1 / span 1;
+        }
+
+        #semicirculo-izquierda {
+            border: var(--ancho-lineas) solid white;
+            border-radius: 50%;
+            z-index: 10;
+            grid-area: 6 / 3 / span 10 / span 3;
+        }
+
+        #linea-vertical-medio-campo-medio {
+            position: relative;
+            background: white;
+            grid-area: 1 / 13 / span 20 / span 1;
+        }
+
+        #linea-vertical-medio-campo-medio::after {
+            position: absolute;
+            top: calc(50% - 3px);
+            left: -3px;
+            width: calc(var(--ancho-lineas) + 6px);
+            height: calc(var(--ancho-lineas) + 6px);
+            content: "";
+            background: white;
+            border-radius: 50%;
+        }
+
+        #circulo-central {
+            border: var(--ancho-lineas) solid white;
+            border-radius: 50%;
+            z-index: 50;
+            grid-area: 5 / 11 / span 12 / span 5;
+        }
+
+        #area-grande-derecha {
+            background-color: green;
+            background-image: url("hierba.png");
+            background-size: 8px 8px;
+            border-top: var(--ancho-lineas) solid white;
+            border-left: var(--ancho-lineas) solid white;
+            border-bottom: var(--ancho-lineas) solid white;
+            z-index: 20;
+            grid-area: 1 / 22 / span 20 / span 4;
+        }
+
+        #area-pequena-derecha {
+            border-top: var(--ancho-lineas) solid white;
+            border-left: var(--ancho-lineas) solid white;
+            border-bottom: var(--ancho-lineas) solid white;
+            z-index: 40;
+            grid-area: 5 / 24 / span 12 / span 2;
+        }
+
+        #penalty-derecha {
+            position: relative;
+            left: calc(var(--ancho-lineas) + 4px);
+            width: calc(var(--ancho-lineas));
+            height: calc(var(--ancho-lineas));
+            background: white;
+            border-radius: 50%;
+            z-index: 30;
+            grid-area: 11 / 23 / span 1 / span 1;
+        }
+
+        #semicirculo-derecha {
+            border: var(--ancho-lineas) solid white;
+            border-radius: 50%;
+            z-index: 10;
+            grid-area: 6 / 21 / span 10 / span 3;
+        }
+
+
+        /* Conmutador */
+        #conmutador-input {
+            display: none;
+        }
+
+        #conmutador-label {
+            opacity: 0.85;
+        }
+
+        #conmutador-label {
+            position: fixed;
+            top: 50px;
+            right: -10px;
+            width: 110px;
+            height: 50px;
+            display: block;
+            background: white;
+            border-top-left-radius: 15% 50%;
+            border-bottom-left-radius: 15% 50%;
+            border-top-right-radius: 15% 50%;
+            border-bottom-right-radius: 15% 50%;
+            box-shadow: inset 0 0 0 23px rgba(50, 205, 50, 0.7);
+            font: bold 16px Arial, sans-serif;
+            cursor: pointer;
+            transform: rotate(90deg);
+            transition: all 05.s linear;
+        }
+
+        #conmutador-label::before {
+            position: absolute;
+            top: 5px;
+            left: 8px;
+            display: block;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid grey;
+            border-radius: 50%;
+            content: "2D";
+            transform: rotate(-90deg);
+            transition: transform 0.5s linear;
+        }
+
+        #conmutador-input:checked~#contenedor-responsive {
+            width: 55%;
+            transform: rotateX(45deg) rotateY(0deg) rotateZ(45deg);
+        }
+
+        #conmutador-input:checked+#conmutador-label {
+            box-shadow: inset 0px 0px 0px 23px rgba(50, 205, 50, 0.7);
+        }
+
+        #conmutador-input:checked+#conmutador-label::before {
+            content: "3D";
+            background-color: white;
+            transform: translateX(50px) rotate(-90deg);
+        }
+
+        /* Media queries */
+        @media only screen and (max-width: 768px) {
+            :root {
+                --ancho-lineas: 2px;
+            }
+        }
+
+        @media only screen and (max-width: 480px) {
+            :root {
+                --ancho-lineas: 1px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="escenario">
+        <input type="checkbox" id="conmutador-input">
+        <label for="conmutador-input" id="conmutador-label" title="Click to change the view"></label>
+        <div id="contenedor-responsive" title="Responsive behavior, resize your browser ;)">
+            <div class="contenedor-campo">
+                <div id="esquina-superior-izquierda"></div>
+                <div id="esquina-superior-derecha"></div>
+                <div id="esquina-inferior-izquierda"></div>
+                <div id="esquina-inferior-derecha"></div>
+                <div id="linea-vertical-medio-campo-arriba"></div>
+                <div id="linea-vertical-medio-campo-abajo"></div>
+                <div id="zona-central">
+                    <div id="area-grande-izquierda"></div>
+                    <div id="area-pequena-izquierda"></div>
+                    <div id="medio-campo-izquierda"></div>
+                    <div id="semicirculo-izquierda"></div>
+                    <div id="penalty-izquierda"></div>
+                    <div id="linea-vertical-medio-campo-medio"></div>
+                    <div id="circulo-central"></div>
+                    <div id="area-grande-derecha"></div>
+                    <div id="area-pequena-derecha"></div>
+                    <div id="medio-campo-derecha"></div>
+                    <div id="semicirculo-derecha"></div>
+                    <div id="penalty-derecha"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
